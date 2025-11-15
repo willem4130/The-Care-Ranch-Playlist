@@ -1,0 +1,254 @@
+/* The Care Ranch Audio Player - Styles */
+
+:root {
+  --primary-color: #1a1a1a;
+  --secondary-color: #4a4a4a;
+  --accent-color: #000000;
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --card-bg: #ffffff;
+  --border-color: #e5e5e5;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.header {
+  background: var(--card-bg);
+  padding: 60px 40px;
+  text-align: center;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.player-section {
+  padding: 40px;
+}
+
+.current-track {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.current-track h2 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.current-track p {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.audio-controls {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 30px;
+}
+
+.audio-player {
+  width: 100%;
+  outline: none;
+}
+
+.audio-player::-webkit-media-controls-panel {
+  background-color: var(--bg-color);
+}
+
+.playlist {
+  margin-top: 20px;
+}
+
+.playlist h3 {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.playlist-item:hover {
+  background: #f0f0f0;
+  border-color: var(--primary-color);
+}
+
+.playlist-item.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.playlist-item .number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.playlist-item.active .number {
+  background: white;
+  color: var(--primary-color);
+}
+
+.playlist-item .title {
+  flex: 1;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.playlist-item .duration {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-left: 10px;
+}
+
+.footer {
+  background: #fafafa;
+  padding: 30px 40px;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* Spotify Section */
+.spotify-section {
+  padding: 0 40px 40px;
+}
+
+.spotify-section h3 {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.spotify-embed {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .header {
+    padding: 40px 30px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .header p {
+    font-size: 1rem;
+  }
+
+  .player-section {
+    padding: 30px 20px;
+  }
+
+  .audio-controls {
+    padding: 20px;
+  }
+
+  .playlist-item {
+    padding: 12px 16px;
+  }
+
+  .playlist-item .title {
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    padding: 20px;
+  }
+
+  .spotify-section {
+    padding: 0 20px 20px;
+  }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
