@@ -24,25 +24,23 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background-attachment: fixed;
   color: var(--text-color);
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 10px;
+  padding: 20px 10px;
   margin: 0;
 }
 
 .container {
   max-width: 900px;
   width: 100%;
-  height: calc(100vh - 20px);
   background: var(--card-bg);
   border-radius: 8px;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -172,12 +170,9 @@ body {
 }
 
 .player-section {
-  padding: 16px 20px;
-  flex: 1;
-  overflow: hidden;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 .current-track {
@@ -218,26 +213,21 @@ body {
 }
 
 .playlist {
-  flex: 1;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 .playlist h3 {
   font-size: 0.9rem;
   color: var(--primary-color);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   font-weight: 600;
-  flex-shrink: 0;
 }
 
 #playlist-container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  overflow: hidden;
+  gap: 8px;
 }
 
 .playlist-item {
@@ -339,13 +329,14 @@ body {
 @media (max-width: 768px) {
   body {
     padding: 0;
+    align-items: stretch;
   }
 
   .container {
-    height: 100vh;
     max-width: 100%;
     border-radius: 0;
     border: none;
+    min-height: 100vh;
   }
 
   .header {
