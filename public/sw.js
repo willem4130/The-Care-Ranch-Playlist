@@ -17,13 +17,48 @@ const urlsToCache = [
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
-// Install event - cache all files
+// Install event - cache all files with progress tracking
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
+      .then(async (cache) => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+
+        // Cache files one by one to track progress
+        const total = urlsToCache.length;
+        let completed = 0;
+
+        for (const url of urlsToCache) {
+          try {
+            await cache.add(url);
+            completed++;
+
+            // Send progress update to all clients
+            const clients = await self.clients.matchAll();
+            clients.forEach(client => {
+              client.postMessage({
+                type: 'CACHE_PROGRESS',
+                completed,
+                total,
+                percentage: Math.round((completed / total) * 100)
+              });
+            });
+
+            console.log(`Cached ${completed}/${total}: ${url}`);
+          } catch (error) {
+            console.error(`Failed to cache ${url}:`, error);
+            // Continue caching other files even if one fails
+          }
+        }
+
+        // Send completion message
+        const clients = await self.clients.matchAll();
+        clients.forEach(client => {
+          client.postMessage({
+            type: 'CACHE_COMPLETE',
+            total
+          });
+        });
       })
   );
 });

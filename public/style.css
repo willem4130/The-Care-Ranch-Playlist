@@ -107,6 +107,7 @@ body {
   background: var(--card-bg-alt);
   border-radius: 20px;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
   font-size: 0.8rem;
@@ -132,6 +133,12 @@ body {
   color: #721c24;
 }
 
+.status-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .status-icon {
   font-size: 1rem;
   animation: pulse 2s ease-in-out infinite;
@@ -143,6 +150,31 @@ body {
 
 .status-text {
   font-weight: 500;
+}
+
+.progress-bar-container {
+  width: 200px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 4px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-top: 4px;
+  opacity: 0.8;
 }
 
 @keyframes pulse {

@@ -30,8 +30,14 @@
 
       <!-- Offline Status Indicator -->
       <div class="offline-status" id="offline-status">
-        <span class="status-icon" id="status-icon">⏳</span>
-        <span class="status-text" id="status-text">Downloading for offline...</span>
+        <div class="status-main">
+          <span class="status-icon" id="status-icon">⏳</span>
+          <span class="status-text" id="status-text">Downloading for offline...</span>
+        </div>
+        <div class="progress-bar-container" id="progress-container" style="display: none;">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-text" id="progress-text" style="display: none;">0%</div>
       </div>
     </div>
 
@@ -231,20 +237,42 @@
       const statusIndicator = document.getElementById('offline-status');
       const statusIcon = document.getElementById('status-icon');
       const statusText = document.getElementById('status-text');
+      const progressContainer = document.getElementById('progress-container');
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
 
       // Set initial downloading state
       statusIndicator.className = 'offline-status downloading';
       statusIcon.textContent = '⏳';
       statusText.textContent = 'Downloading for offline...';
 
+      // Listen for messages from service worker
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data.type === 'CACHE_PROGRESS') {
+          // Show progress bar
+          progressContainer.style.display = 'block';
+          progressText.style.display = 'block';
+          progressBar.style.width = event.data.percentage + '%';
+          progressText.textContent = event.data.percentage + '%';
+          statusText.textContent = `Downloading... (${event.data.completed}/${event.data.total})`;
+        } else if (event.data.type === 'CACHE_COMPLETE') {
+          updateStatusToReady();
+        }
+      });
+
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
           .then((registration) => {
             console.log('✅ Service Worker registered successfully');
 
-            // Check if already activated
-            if (registration.active) {
-              updateStatusToReady();
+            // Check if already activated (already cached from previous visit)
+            if (registration.active && navigator.serviceWorker.controller) {
+              // Check if cache exists
+              caches.has('care-ranch-audio-v1').then((hasCache) => {
+                if (hasCache) {
+                  updateStatusToReady();
+                }
+              });
             }
 
             // Listen for new service worker installation
@@ -252,17 +280,11 @@
               const newWorker = registration.installing;
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'activated') {
-                  updateStatusToReady();
+                  // Wait for cache complete message instead of assuming ready
+                  console.log('Service worker activated, waiting for cache completion...');
                 }
               });
             });
-
-            // Also check after a short delay to catch already-cached state
-            setTimeout(() => {
-              if (navigator.serviceWorker.controller) {
-                updateStatusToReady();
-              }
-            }, 2000);
           })
           .catch((error) => {
             console.log('Service Worker registration failed:', error);
@@ -274,6 +296,7 @@
         statusIndicator.className = 'offline-status ready';
         statusIcon.textContent = '✅';
         statusText.textContent = 'Ready for offline use!';
+        progressContainer.style.display = 'none';
 
         // Show banner briefly
         const banner = document.getElementById('offline-banner');
@@ -289,6 +312,7 @@
         statusIndicator.className = 'offline-status error';
         statusIcon.textContent = '⚠️';
         statusText.textContent = 'Offline mode unavailable';
+        progressContainer.style.display = 'none';
       }
     } else {
       // Service workers not supported
