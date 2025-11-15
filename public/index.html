@@ -25,6 +25,12 @@
       <img src="images/care-ranch-logo.png" alt="The Care Ranch Logo" class="logo">
       <h1>The Care Ranch</h1>
       <p>Guided Audio Sessions for Your Journey</p>
+
+      <!-- Offline Status Indicator -->
+      <div class="offline-status" id="offline-status">
+        <span class="status-icon" id="status-icon">⏳</span>
+        <span class="status-text" id="status-text">Downloading for offline...</span>
+      </div>
     </div>
 
     <!-- Offline Instructions Banner -->
@@ -214,31 +220,76 @@
 
     // Register Service Worker for Offline Support
     if ('serviceWorker' in navigator) {
+      const statusIndicator = document.getElementById('offline-status');
+      const statusIcon = document.getElementById('status-icon');
+      const statusText = document.getElementById('status-text');
+
+      // Set initial downloading state
+      statusIndicator.className = 'offline-status downloading';
+      statusIcon.textContent = '⏳';
+      statusText.textContent = 'Downloading for offline...';
+
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
           .then((registration) => {
             console.log('✅ Service Worker registered successfully');
 
-            // Show offline banner when all files are cached
+            // Check if already activated
+            if (registration.active) {
+              updateStatusToReady();
+            }
+
+            // Listen for new service worker installation
             registration.addEventListener('updatefound', () => {
               const newWorker = registration.installing;
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'activated') {
-                  const banner = document.getElementById('offline-banner');
-                  if (banner) {
-                    banner.style.display = 'block';
-                    setTimeout(() => {
-                      banner.style.display = 'none';
-                    }, 10000); // Hide after 10 seconds
-                  }
+                  updateStatusToReady();
                 }
               });
             });
+
+            // Also check after a short delay to catch already-cached state
+            setTimeout(() => {
+              if (navigator.serviceWorker.controller) {
+                updateStatusToReady();
+              }
+            }, 2000);
           })
           .catch((error) => {
             console.log('Service Worker registration failed:', error);
+            updateStatusToError();
           });
       });
+
+      function updateStatusToReady() {
+        statusIndicator.className = 'offline-status ready';
+        statusIcon.textContent = '✅';
+        statusText.textContent = 'Ready for offline use!';
+
+        // Show banner briefly
+        const banner = document.getElementById('offline-banner');
+        if (banner) {
+          banner.style.display = 'block';
+          setTimeout(() => {
+            banner.style.display = 'none';
+          }, 8000);
+        }
+      }
+
+      function updateStatusToError() {
+        statusIndicator.className = 'offline-status error';
+        statusIcon.textContent = '⚠️';
+        statusText.textContent = 'Offline mode unavailable';
+      }
+    } else {
+      // Service workers not supported
+      const statusIndicator = document.getElementById('offline-status');
+      const statusIcon = document.getElementById('status-icon');
+      const statusText = document.getElementById('status-text');
+      statusIndicator.className = 'offline-status error';
+      statusIcon.textContent = '⚠️';
+      statusText.textContent = 'Browser not supported';
     }
   </script>
 </body>
