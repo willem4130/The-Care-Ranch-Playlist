@@ -6,9 +6,15 @@
   <title>The Care Ranch - Audio Sessions</title>
   <meta name="description" content="Guided audio sessions from The Care Ranch - Works offline">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="shortcut icon" href="favicon.ico">
+
   <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2d2520">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Care Ranch Audio">
@@ -268,7 +274,7 @@
             // Check if already activated (already cached from previous visit)
             if (registration.active && navigator.serviceWorker.controller) {
               // Check if cache exists
-              caches.has('care-ranch-audio-v1').then((hasCache) => {
+              caches.has('care-ranch-audio-v2').then((hasCache) => {
                 if (hasCache) {
                   updateStatusToReady();
                 }
