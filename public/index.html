@@ -94,6 +94,12 @@
     </div>
   </div>
 
+  <!-- Image Modal/Lightbox -->
+  <div class="image-modal" id="image-modal">
+    <span class="image-modal-close" id="modal-close">&times;</span>
+    <img src="" alt="Enlarged view" id="modal-image">
+  </div>
+
   <script>
     // Audio tracks configuration
     const tracks = [
@@ -290,6 +296,44 @@
       statusIndicator.className = 'offline-status error';
       statusIcon.textContent = '⚠️';
       statusText.textContent = 'Browser not supported';
+    }
+
+    // Image Modal/Lightbox functionality
+    const imageModal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalClose = document.getElementById('modal-close');
+    const galleryImages = document.querySelectorAll('.gallery-image');
+
+    // Add click event to each gallery image
+    galleryImages.forEach((img) => {
+      img.addEventListener('click', () => {
+        imageModal.classList.add('active');
+        modalImage.src = img.src;
+        modalImage.alt = img.alt;
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      });
+    });
+
+    // Close modal when clicking the X
+    modalClose.addEventListener('click', closeModal);
+
+    // Close modal when clicking outside the image
+    imageModal.addEventListener('click', (e) => {
+      if (e.target === imageModal) {
+        closeModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    function closeModal() {
+      imageModal.classList.remove('active');
+      document.body.style.overflow = ''; // Restore scrolling
     }
   </script>
 </body>
