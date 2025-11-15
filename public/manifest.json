@@ -1,0 +1,20 @@
+{
+  "name": "The Care Ranch Audio Sessions",
+  "short_name": "Care Ranch Audio",
+  "description": "Guided audio sessions from The Care Ranch - Works offline for use on planes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f1ed",
+  "theme_color": "#2d2520",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/care-ranch-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "wellness"],
+  "offline_enabled": true
+}

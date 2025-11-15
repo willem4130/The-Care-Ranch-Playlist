@@ -4,7 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Care Ranch - Audio Sessions</title>
-  <meta name="description" content="Guided audio sessions from The Care Ranch">
+  <meta name="description" content="Guided audio sessions from The Care Ranch - Works offline">
+
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2d2520">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Care Ranch Audio">
+
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +25,11 @@
       <img src="images/care-ranch-logo.png" alt="The Care Ranch Logo" class="logo">
       <h1>The Care Ranch</h1>
       <p>Guided Audio Sessions for Your Journey</p>
+    </div>
+
+    <!-- Offline Instructions Banner -->
+    <div class="offline-banner" id="offline-banner" style="display: none;">
+      ✈️ <strong>Offline Mode Ready!</strong> All audio files are downloaded. You can now use this on a plane.
     </div>
 
     <!-- Image Gallery -->
@@ -70,8 +83,8 @@
 
     <!-- Footer -->
     <div class="footer">
-      <p>© 2025 The Care Ranch. All rights reserved.</p>
-      <p style="margin-top: 8px;">For more information, visit <a href="#" target="_blank">thecareranch.com</a></p>
+      <p><strong>✈️ Offline Mode:</strong> Visit this page once with internet to download all files. Then works on planes!</p>
+      <p style="margin-top: 8px; opacity: 0.7;">© 2025 The Care Ranch. All rights reserved.</p>
     </div>
   </div>
 
@@ -198,6 +211,35 @@
         }
       }
     });
+
+    // Register Service Worker for Offline Support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('✅ Service Worker registered successfully');
+
+            // Show offline banner when all files are cached
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'activated') {
+                  const banner = document.getElementById('offline-banner');
+                  if (banner) {
+                    banner.style.display = 'block';
+                    setTimeout(() => {
+                      banner.style.display = 'none';
+                    }, 10000); // Hide after 10 seconds
+                  }
+                }
+              });
+            });
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
   </script>
 </body>
 </html>
